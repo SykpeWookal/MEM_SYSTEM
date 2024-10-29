@@ -1,0 +1,3 @@
+/home/gxh/SCProject/MEM_SYSTEM/cmake-build-debug/CMakeFiles/PTCCP.dir
+/home/gxh/SCProject/MEM_SYSTEM/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/gxh/SCProject/MEM_SYSTEM/cmake-build-debug/CMakeFiles/rebuild_cache.dir
