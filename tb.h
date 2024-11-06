@@ -48,7 +48,7 @@ SC_MODULE(testbench) {
     // Signals for CORE interface
     //sc_out<bool> ready_core[CORE_NUM];
     sc_out<bool> valid_core[CORE_NUM];
-    sc_out<sc_int<2>> RorWreq_core[CORE_NUM];
+    sc_out<sc_int<3>> RorWreq_core[CORE_NUM];
     sc_out<sc_int<32>> addr_core[CORE_NUM];
     sc_out<sc_int<32>> data_core[CORE_NUM];
     sc_out<sc_int<32>> req_ts_core[CORE_NUM];

@@ -42,11 +42,11 @@ using namespace std;
 #define MSG_RENEW_REP (10)
 
 ////define parameters,config area////
-constexpr int CORE_NUM = 3;
+constexpr int CORE_NUM = 2;
 
-constexpr int LINE_ADDR_LEN = 3;   // line's addr len，if==3 means each line has 2^3 word
-constexpr int SET_ADDR_LEN = 4;   // set's addr len，if==3 means there are 2^3=8 sets total
-constexpr int TAG_ADDR_LEN = 10;  // tag's addr len
+constexpr int LINE_ADDR_LEN = 2;   // line's addr len，if==3 means each line has 2^3 word
+constexpr int SET_ADDR_LEN = 3;   // set's addr len，if==3 means there are 2^3=8 sets total
+constexpr int TAG_ADDR_LEN = 5;  // tag's addr len
 constexpr int WAY_CNT = 1;   // Set-associative  组相连度
 
 constexpr int lease = 10;

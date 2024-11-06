@@ -12,12 +12,12 @@ sc_int<32> max3(const sc_int<32> &a, const sc_int<32> &b, const sc_int<32> &c) {
 void Cache::initialize() {
     //rst
     CacheState.write(CACHE_IDLE);
-    cache_hit.write(false);         // rst cache_hit
-    way_hit.write(0);              // rst way_hit
-    for (auto &i: FIFO_choice) {
-        i.write(0);    // rst FIFO_choice
-    }
-    wayout_choice.write(0);         // rst wayout_choice
+    //cache_hit.write(false);         // rst cache_hit
+    //way_hit.write(0);              // rst way_hit
+//    for (auto &i: FIFO_choice) {
+//        i.write(0);    // rst FIFO_choice
+//    }
+    //wayout_choice.write(0);         // rst wayout_choice
 
     // rst PCache
     pc.pts = 1;                      // rst PCache's pts
@@ -32,6 +32,7 @@ void Cache::initialize() {
             }
         }
     }
+    cout<<"Cache rst finish!"<<endl;
 }
 
 
@@ -76,11 +77,26 @@ void Cache::choose_wayout() {
 
 void Cache::process_core_req() {
     cout << "pros core req" << endl;
+    initialize();
     int find_bus_req_way;
     sc_int<SET_ADDR_LEN> mem_side_set_addr;//not a signal, update immediately
     sc_int<TAG_ADDR_LEN> mem_side_tag_addr;
     while (true) {
         wait();  // wait for clk edge
+        cout    << "Cache: rst = "+ to_string(rst.read())
+                << " Cache: valid_core = " + to_string(valid_core.read())
+                << " Cache: RorWreq_core = " + to_string(RorWreq_core.read())
+                << " Cache: addr_core = " + to_string(addr_core.read())
+                << " Cache: req_ts_core = " + to_string(req_ts_core.read())
+                << " Cache: CacheState = " + to_string(CacheState.read())
+                << endl;
+        cout    << "Cache to bus: valid_cache_to_bus = "+ to_string(valid_cache_to_bus.read())
+                << " Cache to bus: addr_cache_to_bus = " + to_string(addr_cache_to_bus.read())
+                << " Cache to bus: MSG_cache_to_bus = " + to_string(MSG_cache_to_bus.read())
+                << " Cache to bus: pts_cache_to_bus = " + to_string(pts_cache_to_bus.read())
+                << " Cache to bus: rts_cache_to_bus = " + to_string(rts_cache_to_bus.read())
+                << " Cache to bus: wts_cache_to_bus = " + to_string(wts_cache_to_bus.read())
+                << endl;
         if (rst.read()) {
             initialize();  // if rst == true, invoke initialize func
             continue;      // if rst, skip all other codes, do nothing
@@ -167,6 +183,8 @@ void Cache::process_core_req() {
                     } else {   //if miss
                         if (RorWreq_core.read() !=
                             CORE_NO_REQ) { //miss and truly have a req, so have to swap out a line, if dirty, write it back first
+                            req_ts_cache_to_bus.write(req_ts_core.read());
+                            addr_cache_to_bus.write(addr_core);
                             if (pc.Line[set_addr.read()][wayout_choice].LineState ==
                                 STATE_Exclusive) {//judge wayout_choice way dirty?/clean?
                                 //exclusive and eviction
@@ -184,6 +202,7 @@ void Cache::process_core_req() {
                             } else { // miss and in I/S state
                                 switch (RorWreq_core.read()) {  //miss, load/store
                                     case CORE_R_REQ: {
+                                        valid_cache_to_bus.write(true);
                                         if (pc.Line[set_addr.read()][way_hit].LineState == STATE_Invalid) {
                                             MSG_cache_to_bus.write(MSG_SH_REQ);
                                             wts_cache_to_bus.write(0);
@@ -195,9 +214,12 @@ void Cache::process_core_req() {
                                         } else {
                                             cout << "req miss and in I/S state case CORE_R_REQ if error" << endl;
                                         }
+
+
                                     }
                                         break;
                                     case CORE_W_REQ: {
+                                        valid_cache_to_bus.write(true);
                                         if (pc.Line[set_addr.read()][way_hit].LineState == STATE_Invalid) {
                                             MSG_cache_to_bus.write(MSG_EX_REQ);
                                             wts_cache_to_bus.write(0);

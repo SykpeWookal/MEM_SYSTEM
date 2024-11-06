@@ -5,6 +5,9 @@ void SharedBus::bus_arbiter() {
 
     while (true) {
         wait();
+        if(rst.read()){
+            arbitrationResult_coreID.write(-1);
+        }
         if (BusState.read() == BUS_IDLE) {
             int min_ts = INT_MAX, min_id = -1;
             for (int i = 0; i < CORE_NUM; i++) {
@@ -51,7 +54,7 @@ void SharedBus::bus_rst() {
 
     // Reset shared signals
     BusState.write(BUS_IDLE);
-    arbitrationResult_coreID.write(-1);
+    //arbitrationResult_coreID.write(-1);
 
     cout << "Finish rst all bus's signal!" << endl;
 }
@@ -63,6 +66,17 @@ void SharedBus::process_req_bus() {
 
     while (true) {
         wait();
+//        cout << endl;
+        cout    << "Bus: BusState = "+ to_string(BusState.read())
+                << " Bus: arbitrationResult_coreID = " + to_string(arbitrationResult_coreID.read())
+                << " Bus: valid_cache_to_bus0 = " + to_string(valid_cache_to_bus[0].read())
+                << " Bus: valid_cache_to_bus1 = " + to_string(valid_cache_to_bus[1].read())
+                << " Bus: pts_bus_to_TM = " + to_string(pts_bus_to_TM.read())
+                << " Bus: rts_bus_to_TM = " + to_string(rts_bus_to_TM.read())
+                << " Bus: wts_bus_to_TM = " + to_string(wts_bus_to_TM.read())
+                << endl;
+
+
         if (rst.read()) {
             bus_rst();  // if rst == true, invoke initialize func
             continue;      // if rst, skip all other codes, do nothing

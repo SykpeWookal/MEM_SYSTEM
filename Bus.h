@@ -12,7 +12,7 @@ SC_MODULE(SharedBus) {
     ////CACHES TO BUS////
     sc_in<bool> valid_cache_to_bus[CORE_NUM];
     sc_in<sc_int<32>> addr_cache_to_bus[CORE_NUM];
-    sc_in<sc_int<4>> MSG_cache_to_bus[CORE_NUM];
+    sc_in<sc_int<5>> MSG_cache_to_bus[CORE_NUM];
     sc_in<sc_int<32>> pts_cache_to_bus[CORE_NUM];
     sc_in<sc_int<32>> rts_cache_to_bus[CORE_NUM];
     sc_in<sc_int<32>> wts_cache_to_bus[CORE_NUM];
@@ -23,7 +23,7 @@ SC_MODULE(SharedBus) {
     ////BUS TO CACHES////
     sc_out<bool> valid_bus_to_cache[CORE_NUM];
     sc_out<sc_int<32>> addr_bus_to_cache[CORE_NUM];
-    sc_out<sc_int<4>> MSG_bus_to_cache[CORE_NUM];
+    sc_out<sc_int<5>> MSG_bus_to_cache[CORE_NUM];
     //sc_out<sc_int<32>> pts_bus_to_cache[CORE_NUM];
     sc_out<sc_int<32>> rts_bus_to_cache[CORE_NUM];
     sc_out<sc_int<32>> wts_bus_to_cache[CORE_NUM];
@@ -32,7 +32,7 @@ SC_MODULE(SharedBus) {
     ////TM TO BUS////
     sc_in<sc_int<32>> coreID_TM_to_bus;
     sc_in<bool> valid_TM_to_bus;
-    sc_in<sc_int<4>> MSG_TM_to_bus;
+    sc_in<sc_int<5>> MSG_TM_to_bus;
     sc_in<sc_int<32>> addr_TM_to_bus;
     sc_in<sc_int<32>> rts_TM_to_bus;
     sc_in<sc_int<32>> wts_TM_to_bus;
@@ -41,7 +41,7 @@ SC_MODULE(SharedBus) {
     ////BUS TO TM////
     sc_out<sc_int<32>> coreID_bus_to_TM;
     sc_out<bool> valid_bus_to_TM;
-    sc_out<sc_int<4>> MSG_bus_to_TM;
+    sc_out<sc_int<5>> MSG_bus_to_TM;
     sc_out<sc_int<32>> addr_bus_to_TM;
     sc_out<sc_int<32>> pts_bus_to_TM;
     sc_out<sc_int<32>> rts_bus_to_TM;

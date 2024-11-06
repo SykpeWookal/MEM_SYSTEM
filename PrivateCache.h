@@ -42,7 +42,7 @@ SC_MODULE(Cache) {
     ////CORE TO CACHE////
     //sc_in<bool> ready_core;
     sc_in<bool> valid_core;
-    sc_in<sc_int<2>> RorWreq_core;
+    sc_in<sc_int<3>> RorWreq_core;
     sc_in<sc_int<32>> addr_core;
     sc_in<sc_int<32>> data_core;
     sc_in<sc_int<32>> req_ts_core;
@@ -55,7 +55,7 @@ SC_MODULE(Cache) {
     ////CACHE TO BUS////
     sc_out<bool> valid_cache_to_bus;
     sc_out<sc_int<32>> addr_cache_to_bus;
-    sc_out<sc_int<4>> MSG_cache_to_bus;
+    sc_out<sc_int<5>> MSG_cache_to_bus;
     sc_out<sc_int<32>> pts_cache_to_bus;
     sc_out<sc_int<32>> rts_cache_to_bus;
     sc_out<sc_int<32>> wts_cache_to_bus;
@@ -69,8 +69,8 @@ SC_MODULE(Cache) {
     sc_in<sc_int<32>> addr_bus_to_cache;
     sc_in<sc_int<32>> data_line_bus_to_cache[LINE_SIZE];
 
-    sc_in<sc_int<4>> MSG_bus_to_cache;
-    sc_in<sc_int<32>> pts_bus_to_cache;
+    sc_in<sc_int<5>> MSG_bus_to_cache;
+    //sc_in<sc_int<32>> pts_bus_to_cache;
     sc_in<sc_int<32>> rts_bus_to_cache;
     sc_in<sc_int<32>> wts_bus_to_cache;
 
@@ -107,6 +107,13 @@ SC_MODULE(Cache) {
 
     SC_CTOR(Cache) {
         cout << "constructor of CACHE" << endl;
+//        cout << "Cache Module ports:" << endl;
+//        cout << "clk: " << clk.name() << endl;
+//        cout << "valid_core: " << valid_core.name() << endl;
+//        cout << "valid_bus_to_cache: " << valid_bus_to_cache.name() << endl;
+//        cout << "wts_bus_to_cache: " << wts_bus_to_cache.name() << endl;
+//        cout << "data_cache_to_core: " << data_cache_to_core.name() << endl;
+
 
         // Register SC_METHOD
         SC_METHOD(split_address);

@@ -4,7 +4,7 @@
 #include "SysConf.h"
 
 struct STR_TMLine {
-    sc_int<2> LineState;
+    sc_int<4> LineState;
     sc_int<32> rts;
     sc_int<32> wts;
     sc_int<32> owner;
@@ -40,7 +40,7 @@ SC_MODULE(TMmodule) {
     ////BUS TO TM////
     sc_in<sc_int<32>> coreID_bus_to_TM;
     sc_in<bool> valid_bus_to_TM;
-    sc_in<sc_int<4>> MSG_bus_to_TM;
+    sc_in<sc_int<5>> MSG_bus_to_TM;
     sc_in<sc_int<32>> addr_bus_to_TM;
     sc_in<sc_int<32>> data_line_bus_to_TM[LINE_SIZE];
     sc_in<sc_int<32>> pts_bus_to_TM;
@@ -51,7 +51,7 @@ SC_MODULE(TMmodule) {
     ////TM TO BUS////
     sc_out<bool> valid_TM_to_bus;
     sc_out<sc_int<32>> coreID_TM_to_bus;
-    sc_out<sc_int<4>> MSG_TM_to_bus;
+    sc_out<sc_int<5>> MSG_TM_to_bus;
     sc_out<sc_int<32>> addr_TM_to_bus;
     sc_out<sc_int<32>> data_line_TM_to_bus[LINE_SIZE];
     sc_out<sc_int<32>> rts_TM_to_bus;
@@ -77,9 +77,9 @@ SC_MODULE(TMmodule) {
 
     SC_CTOR(TMmodule) {
         cout << "constructor of TM" << endl;
-        cout << "Module ports:" << endl;
-        cout << "wts_TM_to_bus: " << wts_TM_to_bus.name() << endl;
-        cout << "data_line_TM_to_bus: " << data_line_TM_to_bus[7].name() << endl;
+//        cout << "Module ports:" << endl;
+//        cout << "wts_TM_to_bus: " << wts_TM_to_bus.name() << endl;
+//        cout << "data_line_TM_to_bus: " << data_line_TM_to_bus[3].name() << endl;
 
         // Register SC_METHOD
         SC_CTHREAD(split_address_TM, clk.pos());

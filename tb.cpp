@@ -6,8 +6,11 @@
 
 // Stimulus generation
 void testbench::stimulus() {
+    cout << endl;
+    cout << "simulation start, t=0" <<endl;
     wait();  // Wait before starting
-
+    cout << endl;
+    cout << "simulation t=1" <<endl;
     // Initialize signals
     for (int i = 0; i < CORE_NUM; i++) {
         //ready_core[i] = false;
@@ -21,7 +24,11 @@ void testbench::stimulus() {
     // Apply reset
     rst.write(true);
     wait();
+    cout << endl;
+    cout << "simulation t=2" <<endl;
     wait();
+    cout << endl;
+    cout << "simulation t=3" <<endl;
     rst.write(false);
 
     // Example test case: Core 0 write request
@@ -30,9 +37,12 @@ void testbench::stimulus() {
     data_core[0].write(0xA0 + 1);           // Example data
     RorWreq_core[0].write(CORE_W_REQ);                // Write request
     valid_core[0].write(true);               // Set valid signal
+    req_ts_core[0].write(3);
 
     for (int i = 0; i < 50; i++) {
         wait();// Wait for the next clock cycle
+        cout << endl;
+        cout << "simulation t="+ to_string((i+4)) <<endl;
     }
 
     valid_core[0].write(false);               // Set valid signal
@@ -44,12 +54,16 @@ void testbench::stimulus() {
     valid_core[1].write(true);               // Set valid signal
     for (int i = 0; i < 50; i++) {
         wait();// Wait for the next clock cycle
+        cout << endl;
+        cout << "simulation t="+ to_string((i+54)) <<endl;
     }
     valid_core[1].write(false);              // Clear valid signal
     wait();                    // Wait for the next clock cycle
+    cout << endl;
+    cout << "simulation t=104" <<endl;
 
     // Finish the simulation after some time
-    wait(1000, SC_NS);
+    wait(100, SC_NS);
     sc_stop();
 }
 
@@ -62,7 +76,7 @@ void testbench::monitor() {
             if (valid_cache_to_core[i]) {
                 cout << "Time: " << sc_time_stamp()
                      << " Core " << i
-                     << " received data: " << data_cache_to_core[i]
+                     << " received data: " << data_cache_to_core
                      << endl;
             }
         }

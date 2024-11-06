@@ -19,12 +19,25 @@ void TMmodule::rst_TM() {
         i.write(0);
     }
 
+    for (auto &i: TM.Mem) {
+        for (auto &j: i) {
+            j.LineState = STATE_Share;//start at share state
+            j.rts = 1;
+            j.wts = 1;
+            j.owner = -1;
+            for (auto &k: j.data) {
+                k = 0;
+            }
+        }
+    }
+    cout<<"TM rst finish!"<<endl;
+
     // Reset all internal signals
-    word_addr_TM.write(0);
-    line_addr_TM.write(0);
-    set_addr_TM.write(0);
-    tag_addr_TM.write(0);
-    unused_addr_TM.write(0);
+//    word_addr_TM.write(0);
+//    line_addr_TM.write(0);
+//    set_addr_TM.write(0);
+//    tag_addr_TM.write(0);
+//    unused_addr_TM.write(0);
 }
 
 
@@ -49,11 +62,22 @@ void TMmodule::split_address_TM() {
 
 void TMmodule::process_req_TM() {
     cout << "process TM req" << endl;
-//    rst_TM();
+    rst_TM();
 
 
     while (true) {
         wait();  // wait for clk edge
+//        cout << endl;
+        cout    << "TM: coreID_bus_to_TM = "+ to_string(coreID_bus_to_TM.read())
+                << " TM: valid_bus_to_TM = " + to_string(valid_bus_to_TM.read())
+                << " TM: MSG_bus_to_TM = " + to_string(MSG_bus_to_TM.read())
+                << " TM: addr_bus_to_TM = " + to_string(addr_bus_to_TM.read())
+                << " TM: pts_bus_to_TM = " + to_string(pts_bus_to_TM.read())
+                << " TM: rts_bus_to_TM = " + to_string(rts_bus_to_TM.read())
+                << " TM: wts_bus_to_TM = " + to_string(wts_bus_to_TM.read())
+                << endl;
+
+
         if (rst.read()) {
             rst_TM();  // if rst == true, invoke initialize func
             continue;      // if rst, skip all other codes, do nothing
@@ -150,6 +174,7 @@ void TMmodule::process_req_TM() {
                 break;
             case MSG_NOTHING: {
                 MSG_TM_to_bus.write(MSG_NOTHING);
+                cout<<"TM: NO MSG,run rst."<<endl;
                 rst_TM();
             }
                 break;
